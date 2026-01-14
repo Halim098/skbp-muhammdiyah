@@ -7,6 +7,22 @@ use Illuminate\Support\Facades\DB;
 
 class MahasiswaController extends Controller
 {
+    public function fakultas_Prodi()
+    {
+        $mahasiswa = session('mahasiswa');
+
+        $fakultas = DB::table('fakultas')
+            ->orderBy('nama')
+            ->get();
+
+        $prodi = DB::table('prodi')
+            ->orderBy('nama')
+            ->get();
+
+        return view('data-mahasiswa', compact('mahasiswa', 'fakultas', 'prodi'), ['title' => 'Data Mahasiswa']);
+    }
+
+
     public function update(Request $request)
     {
         $old = session('mahasiswa'); // data lama dari session
@@ -25,6 +41,7 @@ class MahasiswaController extends Controller
                 'email' => $request->filled('email') ? $request->email : $old->email,
                 'jenis' => $request->filled('jenis') ? $request->jenis : $old->jenis,
                 'agama' => $request->filled('agama') ? $request->agama : $old->agama,
+                'judul_karya' => $request->filled('judul_karya') ? $request->judul_karya : $old->judul_karya,
             ]);
 
         // ambil data terbaru dari database

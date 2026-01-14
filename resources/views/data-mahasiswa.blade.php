@@ -33,19 +33,34 @@ $mhs = session('mahasiswa');
                 class="w-full px-4 py-3 border rounded">
 
             <p>Fakultas :</p>
-            <input type="text" name="fakultas"
-                placeholder="{{ $mhs->fakultas }}"
-                class="w-full px-4 py-3 border rounded">
+            <select name="fakultas"
+                class="w-full px-4 py-3 border rounded select-search">
+                <option value="">-- Pilih Fakultas --</option>
+                @foreach($fakultas as $f)
+                <option value="{{ $f->nama }}"
+                    {{ ($mhs->fakultas ?? '') == $f->nama ? 'selected' : '' }}>
+                    {{ $f->nama }}
+                </option>
+                @endforeach
+            </select>
 
-            <p>Jurusan :</p>
-            <input type="text" name="jurusan"
-                placeholder="{{ $mhs->jurusan }}"
-                class="w-full px-4 py-3 border rounded">
+            <p>Prodi :</p>
+            <select name="jurusan"
+                class="w-full px-4 py-3 border rounded select-search">
+                <option value="">-- Pilih Prodi --</option>
+                @foreach($prodi as $p)
+                <option value="{{ $p->nama }}"
+                    {{ ($mhs->jurusan ?? '') == $p->nama ? 'selected' : '' }}>
+                    {{ $p->nama }}
+                </option>
+                @endforeach
+            </select>
 
             <p>Alamat :</p>
             <input type="text" name="alamat"
                 placeholder="{{ $mhs->alamat ?? 'Alamat' }}"
                 class="w-full px-4 py-3 border rounded">
+
         </div>
 
         <!-- KANAN -->
@@ -83,11 +98,15 @@ $mhs = session('mahasiswa');
                 <option value="skripsi" {{ ($mhs->jenis ?? '') == 'skripsi' ? 'selected' : '' }}>Skripsi</option>
                 <option value="KTI" {{ ($mhs->jenis ?? '') == 'KTI' ? 'selected' : '' }}>KTI</option>
                 <option value="tesis" {{ ($mhs->jenis ?? '') == 'tesis' ? 'selected' : '' }}>Tesis</option>
-
+                <option value="artikel" {{ ($mhs->jenis ?? '') == 'artikel' ? 'selected' : '' }}>Artikel</option>
+                <option value="buku" {{ ($mhs->jenis ?? '') == 'buku' ? 'selected' : '' }}>Buku</option>
             </select>
         </div>
-
     </div>
+    <p class="mt-3 mb-2">Judul Karya Ilmiah :</p>
+    <input type="text" name="judul_karya"
+        placeholder="{{ $mhs->judul_karya ?? 'Judul Karya' }}"
+        class="w-full px-4 py-3 border rounded">
 
     <!-- BUTTON -->
     <div class="mt-8 text-center">

@@ -3,9 +3,39 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>{{ $title ?? 'Dashboard' }}</title>
+    <title>{{ $title ?? 'SKBP' }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
+
+<style>
+    /* Container utama Select2 */
+    .select2-container .select2-selection--single {
+        height: 48px !important;
+        /* sama dengan input py-3 */
+        padding: 10px 16px !important;
+        /* px-4 py-3 */
+        border-radius: 0.375rem;
+        /* rounded */
+        border: 1px solid #e5e7eb;
+        /* gray-200 */
+        display: flex;
+        align-items: center;
+    }
+
+    /* Teks di dalam */
+    .select2-selection__rendered {
+        line-height: normal !important;
+        padding-left: 0 !important;
+    }
+
+    /* Panah dropdown */
+    .select2-selection__arrow {
+        height: 48px !important;
+    }
+</style>
+
 
 <body class="bg-green-50 min-h-screen flex">
 
@@ -62,6 +92,18 @@
 
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.select-search').select2({
+                placeholder: 'Ketik untuk mencari...',
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 </body>
 
 </html>

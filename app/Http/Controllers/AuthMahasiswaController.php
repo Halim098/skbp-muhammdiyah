@@ -32,6 +32,7 @@ class AuthMahasiswaController extends Controller
                 'jenis'     => '-',
                 'agama'    => '-',
                 'status'   => 'tidak valid',
+                'judul_karya' => '-',
             ]);
 
             $data = DB::table('mahasiswa')->where('nim', $nim)->first();

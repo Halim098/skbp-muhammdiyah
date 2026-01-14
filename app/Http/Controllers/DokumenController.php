@@ -23,6 +23,7 @@ class DokumenController extends Controller
             $mahasiswa->jenis,
             $mahasiswa->tempat_tanggal_lahir,
             $mahasiswa->agama,
+            $mahasiswa->judul_karya,
         ])->every(fn($v) => !empty($v) && $v !== '-');
 
         $dokumen = DB::table('dokumen')
@@ -30,13 +31,39 @@ class DokumenController extends Controller
             ->get()
             ->keyBy('jenis');
 
-        return view('dokumen', compact('dokumen', 'isLengkap'));
+        return view('dokumen', compact('dokumen', 'isLengkap'), ['title' => 'Upload Dokumen']);
+    }
+
+    private function getBasePath($mahasiswa)
+    {
+        // set tanggal folder sekali saja
+        if (!$mahasiswa->folder_date) {
+            $tanggal = now('Asia/Jakarta')->toDateString();
+
+            DB::table('mahasiswa')
+                ->where('nim', $mahasiswa->nim)
+                ->update([
+                    'folder_date' => $tanggal
+                ]);
+        } else {
+            $tanggal = $mahasiswa->folder_date;
+        }
+
+        // rapikan nama folder (hindari spasi aneh & simbol)
+        $fakultas = str_replace(['/', '\\'], '-', $mahasiswa->fakultas);
+        $prodi    = str_replace(['/', '\\'], '-', $mahasiswa->jurusan);
+        $namaNim  = str_replace(['/', '\\'], '-', "{$mahasiswa->nama}_{$mahasiswa->nim}");
+
+        return "dokumen/{$fakultas}/{$prodi}/{$tanggal}/{$namaNim}";
     }
 
 
-    public function upload(Request $request)
+    public function uploadSkripsi(Request $request)
     {
-        $nim = session('mahasiswa')->nim;
+        $mahasiswa = session('mahasiswa');
+        $nim = $mahasiswa->nim;
+
+        $pathBase = $this->getBasePath($mahasiswa);
 
         $map = [
             'pendahuluan' => 'Pendahuluan',
@@ -50,46 +77,130 @@ class DokumenController extends Controller
             'jurnal' => 'Jurnal',
             'surat' => 'Surat-Pernyataan',
             'skripsi_full' => 'Skripsi-Lengkap',
+            'bukti_sumbangan' => 'Bukti-Sumbangan',
         ];
 
         foreach ($map as $input => $label) {
             if ($request->hasFile($input)) {
 
                 $file = $request->file($input);
-                $ext = $file->getClientOriginalExtension();
-
+                $ext  = $file->getClientOriginalExtension();
                 $filename = "{$nim}-{$label}.{$ext}";
-                $path = "dokumen/{$nim}";
 
-                // === CEK DATA LAMA ===
+                // ambil data lama
                 $old = DB::table('dokumen')
                     ->where('nim', $nim)
                     ->where('jenis', $input)
                     ->first();
 
-                // hapus file lama jika ada
+                // HAPUS FILE LAMA (update)
                 if ($old && Storage::disk('public')->exists($old->path)) {
                     Storage::disk('public')->delete($old->path);
                 }
 
-                // simpan file baru
-                $file->storeAs($path, $filename, 'public');
+                // SIMPAN KE FOLDER YANG SAMA
+                $file->storeAs($pathBase, $filename, 'public');
 
-                // simpan / update database
                 DB::table('dokumen')->updateOrInsert(
+                    ['nim' => $nim, 'jenis' => $input],
                     [
-                        'nim' => $nim,
-                        'jenis' => $input
-                    ],
-                    [
-                        'path' => "{$path}/{$filename}",
+                        'path' => "{$pathBase}/{$filename}",
                         'status' => 'pending',
-                        'add_time' => now()
+                        'add_time' => now('Asia/Jakarta'),
                     ]
                 );
             }
         }
 
-        return back()->with('success', 'Dokumen berhasil diupload / diperbarui');
+        return back()->with('success', 'Dokumen berhasil diupload');
+    }
+
+
+    public function uploadBuku(Request $request)
+    {
+        $mahasiswa = session('mahasiswa');
+        $nim = $mahasiswa->nim;
+
+        // BASE PATH SAMA DENGAN SKRIPSI
+        $pathBase = $this->getBasePath($mahasiswa);
+
+        for ($i = 1; $i <= 5; $i++) {
+            $key = "testbuku{$i}";
+
+            if ($request->hasFile($key)) {
+
+                $file = $request->file($key);
+                $ext  = $file->getClientOriginalExtension();
+                $filename = "{$nim}-testbuku{$i}.{$ext}";
+
+                $old = DB::table('dokumen')
+                    ->where('nim', $nim)
+                    ->where('jenis', $key)
+                    ->first();
+
+                // HAPUS FILE LAMA (UPDATE)
+                if ($old && Storage::disk('public')->exists($old->path)) {
+                    Storage::disk('public')->delete($old->path);
+                }
+
+                // SIMPAN DI FOLDER YANG SAMA
+                $file->storeAs($pathBase, $filename, 'public');
+
+                DB::table('dokumen')->updateOrInsert(
+                    ['nim' => $nim, 'jenis' => $key],
+                    [
+                        'path' => "{$pathBase}/{$filename}",
+                        'status' => 'pending',
+                        'add_time' => now('Asia/Jakarta'),
+                    ]
+                );
+            }
+        }
+
+        return back()->with('success', 'Dokumen buku berhasil diupload');
+    }
+
+    public function uploadArtikel(Request $request)
+    {
+        $mahasiswa = session('mahasiswa');
+        $nim = $mahasiswa->nim;
+
+        // BASE PATH SAMA DENGAN SKRIPSI
+        $pathBase = $this->getBasePath($mahasiswa);
+
+        for ($i = 1; $i <= 5; $i++) {
+            $key = "testartikel{$i}";
+
+            if ($request->hasFile($key)) {
+
+                $file = $request->file($key);
+                $ext  = $file->getClientOriginalExtension();
+                $filename = "{$nim}-testartikel{$i}.{$ext}";
+
+                $old = DB::table('dokumen')
+                    ->where('nim', $nim)
+                    ->where('jenis', $key)
+                    ->first();
+
+                // HAPUS FILE LAMA (UPDATE)
+                if ($old && Storage::disk('public')->exists($old->path)) {
+                    Storage::disk('public')->delete($old->path);
+                }
+
+                // SIMPAN DI FOLDER YANG SAMA
+                $file->storeAs($pathBase, $filename, 'public');
+
+                DB::table('dokumen')->updateOrInsert(
+                    ['nim' => $nim, 'jenis' => $key],
+                    [
+                        'path' => "{$pathBase}/{$filename}",
+                        'status' => 'pending',
+                        'add_time' => now('Asia/Jakarta'),
+                    ]
+                );
+            }
+        }
+
+        return back()->with('success', 'Dokumen artikel berhasil diupload');
     }
 }
