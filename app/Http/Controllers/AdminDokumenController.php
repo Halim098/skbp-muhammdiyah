@@ -106,7 +106,7 @@ class AdminDokumenController extends Controller
         // ===============================
         // DAFTAR DOKUMEN WAJIB
         // ===============================
-        $wajibskri = [
+        $wajibskripsi = [
             'pendahuluan',
             'bab1',
             'bab2',
@@ -115,26 +115,23 @@ class AdminDokumenController extends Controller
             'bab5',
             'lampiran',
             'abstraksi',
-            'jurnal',
             'surat',
             'skripsi_full',
             'bukti_sumbangan',
         ];
 
         $wajibbuku = [
-            'testbuku1',
-            'testbuku2',
-            'testbuku3',
-            'testbuku4',
-            'testbuku5',
+            'pendahuluan',
+            'buku_full',
+            'surat',
+            'bukti_sumbangan',
         ];
 
         $wajibartikel = [
-            'testartikel1',
-            'testartikel2',
-            'testartikel3',
-            'testartikel4',
-            'testartikel5',
+            'pendahuluan',
+            'artikel_full',
+            'surat',
+            'bukti_sumbangan',
         ];
 
         // ambil dokumen mahasiswa
@@ -149,15 +146,23 @@ class AdminDokumenController extends Controller
             ->where('nim', $nim)
             ->value('jenis');
 
-        if ($jenis_karya === 'skripsi') {
-            $wajib = $wajibskri;
+        if ($jenis_karya === 'artikel') {
+            $wajib = $wajibartikel;
         } elseif ($jenis_karya === 'buku') {
             $wajib = $wajibbuku;
         } else {
-            $wajib = $wajibartikel;
+            $wajib = $wajibskripsi;
         }
 
+        $opsional = ['jurnal']; // ← JURNAL TIDAK WAJIB
+
         foreach ($wajib as $jenis) {
+
+            // lewati dokumen opsional
+            if (in_array($jenis, $opsional)) {
+                continue;
+            }
+
             if (
                 !isset($dokumen[$jenis]) ||
                 $dokumen[$jenis]->status !== 'diterima'
@@ -166,6 +171,7 @@ class AdminDokumenController extends Controller
                 break;
             }
         }
+
 
         // UPDATE STATUS MAHASISWA (JIKA PERLU)
         if ($semuaLengkap) {

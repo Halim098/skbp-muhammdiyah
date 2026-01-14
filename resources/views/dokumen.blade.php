@@ -20,9 +20,6 @@ return '-';
 return $dokumen[$key]->keterangan ?: '-';
 }
 
-
-
-
 function disableUpload($dokumen, $key) {
 if (!isset($dokumen[$key])) return false;
 return in_array($dokumen[$key]->status, ['pending', 'diterima']);
@@ -69,50 +66,133 @@ $jenis = session('mahasiswa')->jenis;
 </div>
 
 @if($jenis === 'buku')
-<form action="{{ route('dokumen.upload.buku') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('dokumen.upload.buku') }}" method="POST" enctype="multipart/form-data"
+    class="bg-white p-6 rounded-lg shadow space-y-5">
     @csrf
 
-    @for($i=1;$i<=5;$i++)
-        <div class="mb-3">
-        <label class="font-semibold">Test Buku {{ $i }}</label>
+    {{-- Pendahuluan --}}
+    <div class="border p-4 rounded">
+        <label class="font-semibold flex items-center gap-2 mb-2">
+            Pendahuluan
+            {!! statusIcon($dokumen,'pendahuluan') !!}
+        </label>
 
-        @if(($ket = keterangan($dokumen, 'testbuku' . $i)) !== '-')
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-3 text-sm">
+        @if(($ket = keterangan($dokumen,'pendahuluan')) !== '-')
+        <div class="bg-red-100 border border-red-400 text-red-700 p-2 rounded text-sm mb-2">
             ⚠ {{ $ket }}
         </div>
         @endif
 
-        <input type="file" name="testbuku{{ $i }}" class="form-input w-full">
-        </div>
-        @endfor
+        <input type="file" name="pendahuluan" class="form-input w-full"
+            {{ disableUpload($dokumen,'pendahuluan') ? 'disabled' : '' }}>
+    </div>
 
-        <button class="bg-green-600 text-white px-6 py-2 rounded">
-            Upload Buku
-        </button>
+    {{-- Buku Lengkap --}}
+    <div class="border p-4 rounded">
+        <label class="font-semibold flex items-center gap-2 mb-2">
+            Buku Lengkap
+            {!! statusIcon($dokumen,'buku_full') !!}
+        </label>
+
+        @if(($ket = keterangan($dokumen,'buku_full')) !== '-')
+        <div class="bg-red-100 border border-red-400 text-red-700 p-2 rounded text-sm mb-2">
+            ⚠ {{ $ket }}
+        </div>
+        @endif
+
+        <input type="file" name="buku_full" class="form-input w-full"
+            {{ disableUpload($dokumen,'buku_full') ? 'disabled' : '' }}>
+    </div>
+
+    {{-- Formulir Perpustakaan --}}
+    <div class="border p-4 rounded">
+        <label class="font-semibold flex items-center gap-2 mb-2">
+            Formulir Perpustakaan Terpadu
+            {!! statusIcon($dokumen,'surat') !!}
+        </label>
+
+        @if(($ket = keterangan($dokumen,'surat')) !== '-')
+        <div class="bg-red-100 border border-red-400 text-red-700 p-2 rounded text-sm mb-2">
+            ⚠ {{ $ket }}
+        </div>
+        @endif
+
+        <input type="file" name="surat" class="form-input w-full"
+            {{ disableUpload($dokumen,'surat') ? 'disabled' : '' }}>
+    </div>
+
+    {{-- Bukti Sumbangan --}}
+    <div class="border p-4 rounded">
+        <label class="font-semibold flex items-center gap-2 mb-2">
+            Bukti Sumbangan Buku
+            {!! statusIcon($dokumen,'bukti_sumbangan') !!}
+        </label>
+
+        @if(($ket = keterangan($dokumen,'bukti_sumbangan')) !== '-')
+        <div class="bg-red-100 border border-red-400 text-red-700 p-2 rounded text-sm mb-2">
+            ⚠ {{ $ket }}
+        </div>
+        @endif
+
+        <input type="file" name="bukti_sumbangan" class="form-input w-full"
+            {{ disableUpload($dokumen,'bukti_sumbangan') ? 'disabled' : '' }}>
+    </div>
+
+    <button class="bg-green-600 text-white px-6 py-2 rounded">
+        Upload Dokumen Buku
+    </button>
 </form>
 
 @elseif($jenis === 'artikel')
-<form action="{{ route('dokumen.upload.artikel') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('dokumen.upload.artikel') }}" method="POST" enctype="multipart/form-data"
+    class="bg-white p-6 rounded-lg shadow space-y-5">
     @csrf
 
-    @for($i=1;$i<=5;$i++)
-        <div class="mb-3">
-        <label class="font-semibold">Test Artikel {{ $i }}</label>
+    {{-- Pendahuluan --}}
+    <div class="border p-4 rounded">
+        <label class="font-semibold flex items-center gap-2 mb-2">
+            Pendahuluan
+            {!! statusIcon($dokumen,'pendahuluan') !!}
+        </label>
+        <input type="file" name="pendahuluan" class="form-input w-full"
+            {{ disableUpload($dokumen,'pendahuluan') ? 'disabled' : '' }}>
+    </div>
 
-        @if(($ket = keterangan($dokumen, 'testartikel' . $i)) !== '-')
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-3 text-sm">
-            ⚠ {{ $ket }}
-        </div>
-        @endif
+    {{-- Artikel Lengkap --}}
+    <div class="border p-4 rounded">
+        <label class="font-semibold flex items-center gap-2 mb-2">
+            Artikel Lengkap
+            {!! statusIcon($dokumen,'artikel_full') !!}
+        </label>
+        <input type="file" name="artikel_full" class="form-input w-full"
+            {{ disableUpload($dokumen,'artikel_full') ? 'disabled' : '' }}>
+    </div>
 
-        <input type="file" name="testartikel{{ $i }}" class="form-input w-full">
-        </div>
-        @endfor
+    {{-- Formulir --}}
+    <div class="border p-4 rounded">
+        <label class="font-semibold flex items-center gap-2 mb-2">
+            Formulir Perpustakaan Terpadu
+            {!! statusIcon($dokumen,'surat') !!}
+        </label>
+        <input type="file" name="surat" class="form-input w-full"
+            {{ disableUpload($dokumen,'surat') ? 'disabled' : '' }}>
+    </div>
 
-        <button class="bg-green-600 text-white px-6 py-2 rounded">
-            Upload Artikel
-        </button>
+    {{-- Bukti --}}
+    <div class="border p-4 rounded">
+        <label class="font-semibold flex items-center gap-2 mb-2">
+            Bukti Sumbangan Buku
+            {!! statusIcon($dokumen,'bukti_sumbangan') !!}
+        </label>
+        <input type="file" name="bukti_sumbangan" class="form-input w-full"
+            {{ disableUpload($dokumen,'bukti_sumbangan') ? 'disabled' : '' }}>
+    </div>
+
+    <button class="bg-green-600 text-white px-6 py-2 rounded">
+        Upload Dokumen Artikel
+    </button>
 </form>
+
 @else
 <form action="{{ route('dokumen.upload.skripsi') }}" method="POST" enctype="multipart/form-data"
     class="bg-white p-8 rounded-xl shadow space-y-6">
@@ -294,6 +374,9 @@ $jenis = session('mahasiswa')->jenis;
     <div class="border rounded-lg p-4">
         <label class="font-semibold flex items-center gap-2 mb-2">
             Jurnal
+            <span class="bg-yellow-300 text-yellow-900 text-xs font-semibold px-2 py-0.5 rounded">
+                Jika Ada
+            </span>
             {!! statusIcon($dokumen, 'jurnal') !!}
         </label>
 
@@ -316,7 +399,7 @@ $jenis = session('mahasiswa')->jenis;
     {{-- SURAT --}}
     <div class="border rounded-lg p-4">
         <label class="font-semibold flex items-center gap-2 mb-2">
-            Scan Surat Pernyataan
+            Scan Formulir Perpustakaan Terpadu
             {!! statusIcon($dokumen, 'surat') !!}
         </label>
 

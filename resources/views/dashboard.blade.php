@@ -35,18 +35,26 @@
         ⚠ Harap melengkapi dokumen dalam waktu 7 hari karena dokumen terhapus otomatis oleh sistem.
     </p>
 
+    @php
+    $listBuku = [
+    'pendahuluan' => 'Pendahuluan',
+    'buku_full' => 'Buku Lengkap',
+    'surat' => 'Scan Formulir Perpustakaan Terpadu',
+    'bukti_sumbangan' => 'Bukti Sumbangan Buku',
+    ];
+    @endphp
+
     <table class="w-full border text-sm">
         <thead class="bg-gray-100">
             <tr>
-                <th class="border p-2 text-left">Dokumen Buku</th>
+                <th class="border p-2 text-left">Dokumen</th>
                 <th class="border p-2 text-center">Status</th>
             </tr>
         </thead>
         <tbody>
-            @for($i = 1; $i <= 5; $i++)
-                @php $key='testbuku' .$i; @endphp
-                <tr>
-                <td class="border p-2">Buku {{ $i }}</td>
+            @foreach($listBuku as $key => $label)
+            <tr>
+                <td class="border p-2">{{ $label }}</td>
                 <td class="border p-2 text-center">
                     @if(!isset($dokumen[$key]))
                     <span class="text-gray-500">Belum Upload</span>
@@ -63,8 +71,8 @@
                     @endswitch
                     @endif
                 </td>
-                </tr>
-                @endfor
+            </tr>
+            @endforeach
         </tbody>
     </table>
 
@@ -78,18 +86,26 @@
         ⚠ Harap melengkapi dokumen dalam waktu 7 hari karena dokumen terhapus otomatis oleh sistem.
     </p>
 
+    @php
+    $listArtikel = [
+    'pendahuluan' => 'Pendahuluan',
+    'artikel_full' => 'Artikel Lengkap',
+    'surat' => 'Scan Formulir Perpustakaan Terpadu',
+    'bukti_sumbangan' => 'Bukti Sumbangan Buku',
+    ];
+    @endphp
+
     <table class="w-full border text-sm">
         <thead class="bg-gray-100">
             <tr>
-                <th class="border p-2 text-left">Dokumen Artikel</th>
+                <th class="border p-2 text-left">Dokumen</th>
                 <th class="border p-2 text-center">Status</th>
             </tr>
         </thead>
         <tbody>
-            @for($i = 1; $i <= 5; $i++)
-                @php $key='testartikel' .$i; @endphp
-                <tr>
-                <td class="border p-2">Artikel {{ $i }}</td>
+            @foreach($listArtikel as $key => $label)
+            <tr>
+                <td class="border p-2">{{ $label }}</td>
                 <td class="border p-2 text-center">
                     @if(!isset($dokumen[$key]))
                     <span class="text-gray-500">Belum Upload</span>
@@ -106,8 +122,8 @@
                     @endswitch
                     @endif
                 </td>
-                </tr>
-                @endfor
+            </tr>
+            @endforeach
         </tbody>
     </table>
 
@@ -132,7 +148,7 @@
     'lampiran' => 'Lampiran',
     'abstraksi' => 'Abstraksi',
     'jurnal' => 'Jurnal',
-    'surat' => 'Surat Pernyataan',
+    'surat' => 'Scan Formulir Perpustakaan Terpadu',
     'skripsi_full' => 'Skripsi Lengkap',
     'bukti_sumbangan' => 'Bukti Sumbangan',
     ];
@@ -148,7 +164,17 @@
         <tbody>
             @foreach($list as $key => $label)
             <tr>
+                @if ($label === 'Jurnal')
+                <td class="border p-2">
+                    {{ $label }}
+                    <span class="bg-yellow-300 text-yellow-900 text-xs font-semibold px-2 py-0.5 rounded">
+                        Jika Ada
+                    </span>
+                </td>
+                @else
                 <td class="border p-2">{{ $label }}</td>
+                @endif
+
                 <td class="border p-2 text-center">
                     @if(!isset($dokumen[$key]))
                     <span class="text-gray-500">Belum Upload</span>

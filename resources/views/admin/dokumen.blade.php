@@ -9,25 +9,23 @@ $wajibSkripsi = [
 'lampiran' => 'Lampiran',
 'abstraksi' => 'Abstraksi',
 'jurnal' => 'Jurnal',
-'surat' => 'Surat Pernyataan',
+'surat' => 'Scan Formulir Perpustakaan Terpadu',
 'skripsi_full' => 'Skripsi Lengkap',
 'bukti_sumbangan' => 'Bukti Sumbangan Buku',
 ];
 
 $wajibBuku = [
-'testbuku1' => 'Test Buku 1',
-'testbuku2' => 'Test Buku 2',
-'testbuku3' => 'Test Buku 3',
-'testbuku4' => 'Test Buku 4',
-'testbuku5' => 'Test Buku 5',
+'pendahuluan' => 'Pendahuluan',
+'buku_full' => 'Buku Lengkap',
+'surat' => 'Scan Formulir Perpustakaan Terpadu',
+'bukti_sumbangan' => 'Bukti Sumbangan Buku',
 ];
 
 $wajibArtikel = [
-'testartikel1' => 'Test Artikel 1',
-'testartikel2' => 'Test Artikel 2',
-'testartikel3' => 'Test Artikel 3',
-'testartikel4' => 'Test Artikel 4',
-'testartikel5' => 'Test Artikel 5',
+'pendahuluan' => 'Pendahuluan',
+'artikel_full' => 'Artikel Lengkap',
+'surat' => 'Scan Formulir Perpustakaan Terpadu',
+'bukti_sumbangan' => 'Bukti Sumbangan Buku',
 ];
 @endphp
 

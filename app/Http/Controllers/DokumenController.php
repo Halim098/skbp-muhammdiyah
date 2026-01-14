@@ -115,39 +115,45 @@ class DokumenController extends Controller
         return back()->with('success', 'Dokumen berhasil diupload');
     }
 
-
     public function uploadBuku(Request $request)
     {
         $mahasiswa = session('mahasiswa');
         $nim = $mahasiswa->nim;
-
-        // BASE PATH SAMA DENGAN SKRIPSI
         $pathBase = $this->getBasePath($mahasiswa);
 
-        for ($i = 1; $i <= 5; $i++) {
-            $key = "testbuku{$i}";
+        $map = [
+            'pendahuluan'      => 'Pendahuluan',
+            'buku_full'       => 'Buku-Lengkap',
+            'surat'           => 'Formulir-Perpustakaan',
+            'bukti_sumbangan' => 'Bukti-Sumbangan',
+        ];
 
-            if ($request->hasFile($key)) {
+        foreach ($map as $input => $label) {
 
-                $file = $request->file($key);
-                $ext  = $file->getClientOriginalExtension();
-                $filename = "{$nim}-testbuku{$i}.{$ext}";
+            if ($request->hasFile($input)) {
+
+                $file = $request->file($input);
+
+                // ❗ WAJIB PDF
+                if (strtolower($file->getClientOriginalExtension()) !== 'pdf') {
+                    return back()->with('error', "File {$label} harus PDF");
+                }
+
+                $filename = "{$nim}-{$label}.pdf";
 
                 $old = DB::table('dokumen')
                     ->where('nim', $nim)
-                    ->where('jenis', $key)
+                    ->where('jenis', $input)
                     ->first();
 
-                // HAPUS FILE LAMA (UPDATE)
                 if ($old && Storage::disk('public')->exists($old->path)) {
                     Storage::disk('public')->delete($old->path);
                 }
 
-                // SIMPAN DI FOLDER YANG SAMA
                 $file->storeAs($pathBase, $filename, 'public');
 
                 DB::table('dokumen')->updateOrInsert(
-                    ['nim' => $nim, 'jenis' => $key],
+                    ['nim' => $nim, 'jenis' => $input],
                     [
                         'path' => "{$pathBase}/{$filename}",
                         'status' => 'pending',
@@ -164,34 +170,41 @@ class DokumenController extends Controller
     {
         $mahasiswa = session('mahasiswa');
         $nim = $mahasiswa->nim;
-
-        // BASE PATH SAMA DENGAN SKRIPSI
         $pathBase = $this->getBasePath($mahasiswa);
 
-        for ($i = 1; $i <= 5; $i++) {
-            $key = "testartikel{$i}";
+        $map = [
+            'pendahuluan'      => 'Pendahuluan',
+            'artikel_full'    => 'Artikel-Lengkap',
+            'surat'           => 'Formulir-Perpustakaan',
+            'bukti_sumbangan' => 'Bukti-Sumbangan',
+        ];
 
-            if ($request->hasFile($key)) {
+        foreach ($map as $input => $label) {
 
-                $file = $request->file($key);
-                $ext  = $file->getClientOriginalExtension();
-                $filename = "{$nim}-testartikel{$i}.{$ext}";
+            if ($request->hasFile($input)) {
+
+                $file = $request->file($input);
+
+                // ❗ WAJIB PDF
+                if (strtolower($file->getClientOriginalExtension()) !== 'pdf') {
+                    return back()->with('error', "File {$label} harus PDF");
+                }
+
+                $filename = "{$nim}-{$label}.pdf";
 
                 $old = DB::table('dokumen')
                     ->where('nim', $nim)
-                    ->where('jenis', $key)
+                    ->where('jenis', $input)
                     ->first();
 
-                // HAPUS FILE LAMA (UPDATE)
                 if ($old && Storage::disk('public')->exists($old->path)) {
                     Storage::disk('public')->delete($old->path);
                 }
 
-                // SIMPAN DI FOLDER YANG SAMA
                 $file->storeAs($pathBase, $filename, 'public');
 
                 DB::table('dokumen')->updateOrInsert(
-                    ['nim' => $nim, 'jenis' => $key],
+                    ['nim' => $nim, 'jenis' => $input],
                     [
                         'path' => "{$pathBase}/{$filename}",
                         'status' => 'pending',
