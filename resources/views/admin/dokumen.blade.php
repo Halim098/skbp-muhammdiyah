@@ -69,6 +69,7 @@ $wajibArtikel = [
                 <th class="border p-2">Prodi</th>
                 <th class="border p-2">Jenis Karya</th>
                 <th class="border p-2">Aksi</th>
+                <th class="border p-2">Hapus</th>
             </tr>
         </thead>
 
@@ -89,6 +90,17 @@ $wajibArtikel = [
                     <button onclick="openModal('{{ $nim }}')" class="text-blue-600">
                         🔍
                     </button>
+                </td>
+                <td class="border p-2 text-center">
+                    <form action="{{ route('admin.mahasiswa.destroy', $items->first()->nim) }}" method="POST"
+                        onsubmit="return confirm('Yakin hapus mahasiswa {{ $items->first()->nama }} dan semua dokumennya?')">
+                        @csrf
+                        @method('DELETE')
+
+                        <button class="text-red-600 hover:text-red-800 text-xl">
+                            🗑
+                        </button>
+                    </form>
                 </td>
             </tr>
             @endforeach

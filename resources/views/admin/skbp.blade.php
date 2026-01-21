@@ -41,6 +41,7 @@
                 <th class="border p-2">Hardcopy</th>
                 <th class="border p-2">Judul</th>
                 <th class="border p-2">Aksi</th>
+                <th class="border p-2">Hapus</th>
             </tr>
         </thead>
 
@@ -82,8 +83,19 @@
                     <a href="{{ route('admin.skbp.cetak', $item->nim) }}"
                         target="_blank"
                         class="bg-green-600 text-white px-3 py-1 rounded">
-                        🖨 Cetak SKBP
+                        🖨
                     </a>
+                </td>
+                <td class="border p-2 text-center">
+                    <form action="{{ route('admin.mahasiswa.destroy', $item->nim) }}" method="POST"
+                        onsubmit="return confirm('Yakin hapus mahasiswa {{ $item->nama }} dan semua dokumennya?')">
+                        @csrf
+                        @method('DELETE')
+
+                        <button class="text-red-600 hover:text-red-800 text-xl">
+                            🗑
+                        </button>
+                    </form>
                 </td>
             </tr>
             @endforeach

@@ -26,8 +26,9 @@ Route::get('/login', function () {
     return view('login');
 });
 
+Route::get('/captcha', [AuthMahasiswaController::class, 'captchaImage']);
+Route::get('/refresh-captcha', [AuthMahasiswaController::class, 'refreshCaptcha']);
 Route::post('/login', [AuthMahasiswaController::class, 'login']);
-
 /*
 |--------------------------------------------------------------------------
 | Mahasiswa Area
@@ -117,17 +118,20 @@ Route::middleware('cekAdmin')->group(function () {
 
         Route::get('/skbp', [AdminValidSKBPController::class, 'index'])
             ->name('admin.skbp.index');
+
+        Route::delete('/mahasiswa/{nim}', [AdminDokumenController::class, 'destroy'])
+            ->name('admin.mahasiswa.destroy');
     });
 });
 // cetak skbp
 Route::get('/skbp/cetak/{nim}', [CetakSKBPController::class, 'print'])
     ->name('admin.skbp.cetak');
 
-// Route::get('/{nim}', [CetakSKBPController::class, 'show']);
+Route::get('/{nim}', [CetakSKBPController::class, 'show']);
 
 // hashing password admin
-Route::get('/hash-admin', function () {
-    $password = '!@SKBP25';
-    $hashed = Hash::make($password);
-    return $hashed;
-});
+// Route::get('/hash-admin', function () {
+//     $password = '!@SKBP25';
+//     $hashed = Hash::make($password);
+//     return $hashed;
+// });

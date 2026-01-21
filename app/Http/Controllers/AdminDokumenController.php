@@ -279,4 +279,39 @@ class AdminDokumenController extends Controller
 
         return response()->download($zipPath)->deleteFileAfterSend(true);
     }
+
+    public function destroy($nim)
+    {
+        // Ambil data mahasiswa
+        $mhs = DB::table('mahasiswa')->where('nim', $nim)->first();
+
+        if (!$mhs) {
+            return back()->with('error', 'Mahasiswa tidak ditemukan');
+        }
+
+        // Rapikan nama folder
+        $fakultas = str_replace(['/', '\\'], '-', $mhs->fakultas);
+        $prodi    = str_replace(['/', '\\'], '-', $mhs->jurusan);
+        $namaNim  = str_replace(['/', '\\'], '-', "{$mhs->nama}_{$mhs->nim}");
+        $tanggal  = $mhs->folder_date;
+
+        // Path folder mahasiswa
+        $folderPath = "dokumen/{$fakultas}/{$prodi}/{$tanggal}/{$namaNim}";
+
+        // Hapus seluruh folder dokumen mahasiswa
+        if (Storage::disk('public')->exists($folderPath)) {
+            Storage::disk('public')->deleteDirectory($folderPath);
+        }
+
+        // Hapus dokumen dari database
+        DB::table('dokumen')->where('nim', $nim)->delete();
+
+        // Hapus hardcopy
+        DB::table('hardcopy')->where('nim', $nim)->delete();
+
+        // Hapus mahasiswa
+        DB::table('mahasiswa')->where('nim', $nim)->delete();
+
+        return back()->with('success', 'Mahasiswa dan seluruh dokumen berhasil dihapus');
+    }
 }

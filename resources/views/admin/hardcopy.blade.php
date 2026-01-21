@@ -38,6 +38,7 @@
                 <th class="border p-2">Prodi</th>
                 <th class="border p-2">Pilihan</th>
                 <th class="border p-2">Aksi</th>
+                <th class="border p-2">Hapus</th>
             </tr>
         </thead>
 
@@ -64,6 +65,17 @@
                         @method('PUT')
                         <button class="bg-green-600 text-white px-3 py-1 rounded">
                             Validasi
+                        </button>
+                    </form>
+                </td>
+                <td class="border p-2 text-center">
+                    <form action="{{ route('admin.mahasiswa.destroy', $item->nim) }}" method="POST"
+                        onsubmit="return confirm('Yakin hapus mahasiswa {{ $item->nama }} dan semua dokumennya?')">
+                        @csrf
+                        @method('DELETE')
+
+                        <button class="text-red-600 hover:text-red-800 text-xl">
+                            🗑
                         </button>
                     </form>
                 </td>
