@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <title>SKBP</title>
-
     <style>
         body {
             font-family: "Times New Roman", serif;
@@ -158,7 +157,7 @@
             <!-- JUDUL -->
             <td class="kop-judul" colspan="2">
                 <h2>UNIVERSITAS MUHAMMADIYAH PALANGKARAYA</h2>
-                <h3>BIRO PERPUSTAKAAN DAN PENGELOLAAN JURNAL</h3>
+                <h3>DIREKTORAT PERPUSTAKAAN DAN PENGARSIPAN</h3>
             </td>
         </tr>
 
@@ -174,7 +173,7 @@
                     <tr>
                         <td class="label">Nomor Kontak</td>
                         <td class="colon">:</td>
-                        <td>+62 821-9080-2415</td>
+                        <td>(0536) 4211817</td>
                     </tr>
                     <tr>
                         <td class="label">Email</td>
@@ -231,8 +230,8 @@
 
     <div class="isi">
         <p>
-            <b>Kepala Biro Perpustakaan dan Pengelolaan Jurnal Universitas Muhammadiyah Palangkaraya,</b>
-            dengan ini menerangkan bahwa:
+            <b>Direktorat Perpustakaan dan Pengarsipan Universitas Muhammadiyah Palangkaraya, dengan ini</b>
+             menerangkan bahwa:
         </p>
 
         <table class="data">
@@ -266,7 +265,7 @@
         <p>
             Dari hasil pengecekan, bahwa nama tersebut di atas telah memenuhi persyaratan dan
             dinyatakan <b>bersih dari pinjam buku dan bahan pustaka lainnya</b> pada
-            UPT Perpustakaan Universitas Muhammadiyah Palangkaraya.
+            Direktorat Perpustakaan dan Pengarsipan Universitas Muhammadiyah Palangkaraya.
         </p>
 
         <p>
@@ -279,9 +278,8 @@
         <tr>
             <td width="60%"></td>
             <td>
-                Palangka Raya, {{ \Carbon\Carbon::parse($skbp->valid_skbp_time)->format('d F Y') }}<br>
-                <b>Kepala Biro</b><br>
-                <b>Perpustakaan dan Pengelolaan Jurnal</b>
+                Palangka Raya, {{ \Carbon\Carbon::parse($skbp->valid_skbp_time) ->locale('id') ->translatedFormat('d F Y') }}<br>
+                <b>Direktur Perpustakaan dan Pengarsipan</b>
                 <br><br><img src="data:image/png;base64,{{ $barcode }}" width="90"><br><br>
                 <b>Ir. Achmad Imam Santoso, ST., M.Ling</b><br>
                 <b>NIK. 19.0502.027</b>

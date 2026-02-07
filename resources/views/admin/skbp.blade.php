@@ -41,7 +41,9 @@
                 <th class="border p-2">Hardcopy</th>
                 <th class="border p-2">Judul</th>
                 <th class="border p-2">Aksi</th>
+                <th class="border p-2">Download</th>
                 <th class="border p-2">Hapus</th>
+
             </tr>
         </thead>
 
@@ -86,6 +88,11 @@
                         🖨
                     </a>
                 </td>
+                <td class="border p-2 text-center">
+                    <a href="{{ route('admin.dokumen.zip', $item->nim) }}"
+                        class="bg-blue-600 text-white px-3 py-1 rounded">
+                        ⬇️
+                    </a>
                 <td class="border p-2 text-center">
                     <form action="{{ route('admin.mahasiswa.destroy', $item->nim) }}" method="POST"
                         onsubmit="return confirm('Yakin hapus mahasiswa {{ $item->nama }} dan semua dokumennya?')">

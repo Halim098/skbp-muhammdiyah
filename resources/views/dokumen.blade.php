@@ -59,17 +59,20 @@ $jenis = session('mahasiswa')->jenis;
 </div>
 @else
 
-<div class="bg-red-100 border border-red-300 text-red-700 p-4 rounded mb-6">
-    <p class="font-semibold mb-2">
+<div class="bg-red-100 border border-red-300 text-red-700 p-4 mb-6">
+    <p class="font-semibold mb-2 text-red-700">
         ⚠ Harap melengkapi dokumen dalam waktu 7 hari karena dokumen terhapus otomatis oleh sistem.
     </p>
 </div>
 
-@if($jenis === 'buku')
+
+@if($jenis === 'Buku')
 <form action="{{ route('dokumen.upload.buku') }}" method="POST" enctype="multipart/form-data"
     class="bg-white p-6 rounded-lg shadow space-y-5">
     @csrf
-
+    <p class="font-semibold mb-2 text-yellow-700">
+        ⚠ Dokumen diunggah dalam format PDF dan ukuran maksimal 10 MB per file.
+    </p>
     {{-- Pendahuluan --}}
     <div class="border p-4 rounded">
         <label class="font-semibold flex items-center gap-2 mb-2">
@@ -83,7 +86,7 @@ $jenis = session('mahasiswa')->jenis;
         </div>
         @endif
 
-        <input type="file" name="pendahuluan" class="form-input w-full"
+        <input type="file" name="pendahuluan" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen,'pendahuluan') ? 'disabled' : '' }}>
     </div>
 
@@ -100,7 +103,7 @@ $jenis = session('mahasiswa')->jenis;
         </div>
         @endif
 
-        <input type="file" name="buku_full" class="form-input w-full"
+        <input type="file" name="buku_full" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen,'buku_full') ? 'disabled' : '' }}>
     </div>
 
@@ -117,7 +120,7 @@ $jenis = session('mahasiswa')->jenis;
         </div>
         @endif
 
-        <input type="file" name="surat" class="form-input w-full"
+        <input type="file" name="surat" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen,'surat') ? 'disabled' : '' }}>
     </div>
 
@@ -134,7 +137,7 @@ $jenis = session('mahasiswa')->jenis;
         </div>
         @endif
 
-        <input type="file" name="bukti_sumbangan" class="form-input w-full"
+        <input type="file" name="bukti_sumbangan" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen,'bukti_sumbangan') ? 'disabled' : '' }}>
     </div>
 
@@ -143,10 +146,14 @@ $jenis = session('mahasiswa')->jenis;
     </button>
 </form>
 
-@elseif($jenis === 'artikel')
+@elseif($jenis === 'Artikel')
 <form action="{{ route('dokumen.upload.artikel') }}" method="POST" enctype="multipart/form-data"
     class="bg-white p-6 rounded-lg shadow space-y-5">
     @csrf
+
+    <p class="font-semibold mb-2 text-yellow-700">
+        ⚠ Dokumen diunggah dalam format PDF dan ukuran maksimal 10 MB per file.
+    </p>
 
     {{-- Pendahuluan --}}
     <div class="border p-4 rounded">
@@ -154,7 +161,12 @@ $jenis = session('mahasiswa')->jenis;
             Pendahuluan
             {!! statusIcon($dokumen,'pendahuluan') !!}
         </label>
-        <input type="file" name="pendahuluan" class="form-input w-full"
+        @if(($ket = keterangan($dokumen,'pendahuluan')) !== '-')
+        <div class="bg-red-100 border border-red-400 text-red-700 p-2 rounded text-sm mb-2">
+            ⚠ {{ $ket }}
+        </div>
+        @endif
+        <input type="file" name="pendahuluan" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen,'pendahuluan') ? 'disabled' : '' }}>
     </div>
 
@@ -164,7 +176,12 @@ $jenis = session('mahasiswa')->jenis;
             Artikel Lengkap
             {!! statusIcon($dokumen,'artikel_full') !!}
         </label>
-        <input type="file" name="artikel_full" class="form-input w-full"
+        @if(($ket = keterangan($dokumen,'artikel_full')) !== '-')
+        <div class="bg-red-100 border border-red-400 text-red-700 p-2 rounded text-sm mb-2">
+            ⚠ {{ $ket }}
+        </div>
+        @endif
+        <input type="file" name="artikel_full" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen,'artikel_full') ? 'disabled' : '' }}>
     </div>
 
@@ -174,7 +191,12 @@ $jenis = session('mahasiswa')->jenis;
             Formulir Perpustakaan Terpadu
             {!! statusIcon($dokumen,'surat') !!}
         </label>
-        <input type="file" name="surat" class="form-input w-full"
+        @if(($ket = keterangan($dokumen,'surat')) !== '-')
+        <div class="bg-red-100 border border-red-400 text-red-700 p-2 rounded text-sm mb-2">
+            ⚠ {{ $ket }}
+        </div>
+        @endif
+        <input type="file" name="surat" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen,'surat') ? 'disabled' : '' }}>
     </div>
 
@@ -184,7 +206,12 @@ $jenis = session('mahasiswa')->jenis;
             Bukti Sumbangan Buku
             {!! statusIcon($dokumen,'bukti_sumbangan') !!}
         </label>
-        <input type="file" name="bukti_sumbangan" class="form-input w-full"
+        @if(($ket = keterangan($dokumen,'bukti_sumbangan')) !== '-')
+        <div class="bg-red-100 border border-red-400 text-red-700 p-2 rounded text-sm mb-2">
+            ⚠ {{ $ket }}
+        </div>
+        @endif
+        <input type="file" name="bukti_sumbangan" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen,'bukti_sumbangan') ? 'disabled' : '' }}>
     </div>
 
@@ -197,7 +224,9 @@ $jenis = session('mahasiswa')->jenis;
 <form action="{{ route('dokumen.upload.skripsi') }}" method="POST" enctype="multipart/form-data"
     class="bg-white p-8 rounded-xl shadow space-y-6">
     @csrf
-
+    <p class="font-semibold mb-2 text-yellow-700">
+        ⚠ Dokumen diunggah dalam format PDF dan ukuran maksimal 10 MB per file.
+    </p>
     {{-- PENDAHULUAN --}}
     <div class="border rounded-lg p-4">
         <label class="font-semibold flex items-center gap-2 mb-2">
@@ -224,7 +253,7 @@ $jenis = session('mahasiswa')->jenis;
         </div>
 
         <input type="file" name="pendahuluan"
-            class="form-input w-full"
+            class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen, 'pendahuluan') ? 'disabled' : '' }}>
     </div>
 
@@ -247,7 +276,7 @@ $jenis = session('mahasiswa')->jenis;
                 </div>
                 @endif
                 <input type="file" name="bab1"
-                    class="form-input w-full"
+                    class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
                     {{ disableUpload($dokumen, 'bab1') ? 'disabled' : '' }}>
             </div>
 
@@ -263,7 +292,7 @@ $jenis = session('mahasiswa')->jenis;
                 </div>
                 @endif
                 <input type="file" name="bab2"
-                    class="form-input w-full"
+                    class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
                     {{ disableUpload($dokumen, 'bab2') ? 'disabled' : '' }}>
             </div>
 
@@ -281,7 +310,7 @@ $jenis = session('mahasiswa')->jenis;
                 @endif
 
                 <input type="file" name="bab3"
-                    class="form-input w-full"
+                    class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
                     {{ disableUpload($dokumen, 'bab3') ? 'disabled' : '' }}>
             </div>
 
@@ -299,7 +328,7 @@ $jenis = session('mahasiswa')->jenis;
                 @endif
 
                 <input type="file" name="bab4"
-                    class="form-input w-full"
+                    class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
                     {{ disableUpload($dokumen, 'bab4') ? 'disabled' : '' }}>
             </div>
 
@@ -317,7 +346,7 @@ $jenis = session('mahasiswa')->jenis;
                 @endif
 
                 <input type="file" name="bab5"
-                    class="form-input w-full"
+                    class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
                     {{ disableUpload($dokumen, 'bab5') ? 'disabled' : '' }}>
             </div>
         </div>
@@ -341,7 +370,7 @@ $jenis = session('mahasiswa')->jenis;
             Jika lampiran berupa gambar atau data dari suatu program dirubah ke dalam bentuk PDF
         </div>
 
-        <input type="file" name="lampiran" class="form-input w-full"
+        <input type="file" name="lampiran" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen, 'lampiran') ? 'disabled' : '' }}>
     </div>
 
@@ -366,7 +395,7 @@ $jenis = session('mahasiswa')->jenis;
             </ul>
         </div>
 
-        <input type="file" name="abstraksi" class="form-input w-full"
+        <input type="file" name="abstraksi" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen, 'abstraksi') ? 'disabled' : '' }}>
     </div>
 
@@ -393,7 +422,7 @@ $jenis = session('mahasiswa')->jenis;
             </ul>
         </div>
 
-        <input type="file" name="jurnal" class="form-input w-full"
+        <input type="file" name="jurnal" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen, 'jurnal') ? 'disabled' : '' }}>
     </div>
     {{-- SURAT --}}
@@ -414,7 +443,7 @@ $jenis = session('mahasiswa')->jenis;
             <span class="font-semibold">ATAU</span>
             (Surat Pernyataan Tidak Persetujuan Publikasi Karya Ilmiah)
         </div>
-        <input type="file" name="surat" class="form-input w-full"
+        <input type="file" name="surat" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen, 'surat') ? 'disabled' : '' }}>
     </div>
 
@@ -429,7 +458,7 @@ $jenis = session('mahasiswa')->jenis;
             ⚠ {{ $ket }}
         </div>
         @endif
-        <input type="file" name="skripsi_full" class="form-input w-full"
+        <input type="file" name="skripsi_full" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen, 'skripsi_full') ? 'disabled' : '' }}>
     </div>
 
@@ -453,7 +482,7 @@ $jenis = session('mahasiswa')->jenis;
             </ul>
         </div>
 
-        <input type="file" name="bukti_sumbangan" class="form-input w-full"
+        <input type="file" name="bukti_sumbangan" class="form-input w-full" accept="application/pdf" onchange="validatePDF(this)"
             {{ disableUpload($dokumen, 'bukti_sumbangan') ? 'disabled' : '' }}>
     </div>
 
@@ -465,4 +494,26 @@ $jenis = session('mahasiswa')->jenis;
 
 @endif
 @endif
+
+<script>
+    function validatePDF(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        // cek tipe file
+        if (file.type !== 'application/pdf') {
+            alert('Harap upload file PDF');
+            input.value = '';
+            return;
+        }
+
+        // cek ukuran (10 MB)
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+            alert('Ukuran file maksimal 10 MB');
+            input.value = '';
+            return;
+        }
+    }
+</script>
 @endsection

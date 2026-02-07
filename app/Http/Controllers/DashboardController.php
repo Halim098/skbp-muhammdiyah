@@ -11,7 +11,7 @@ class DashboardController extends Controller
     public function index()
     {
         $mahasiswa = session('mahasiswa');
-
+ 
         // cek kelengkapan data mahasiswa
         $dataLengkap = collect([
             $mahasiswa->nama,
@@ -24,7 +24,9 @@ class DashboardController extends Controller
             $mahasiswa->tempat_tanggal_lahir,
             $mahasiswa->agama,
             $mahasiswa->judul_karya,
-        ])->every(fn($v) => !empty($v) && $v !== '-');
+        ])->every(function ($value) {
+            return !is_null($value) && $value !== '' && $value !== '-';
+        });
 
         // dokumen mahasiswa
         $dokumen = DB::table('dokumen')
@@ -55,6 +57,10 @@ class DashboardController extends Controller
 
             $skbpReady = 1;
         }
+
+        $mahasiswa = DB::table('mahasiswa')
+            ->where('nim', $mahasiswa->nim)
+            ->first();
 
         return view('dashboard', compact('mahasiswa', 'dataLengkap', 'dokumen', 'hardcopy', 'skbpReady'), ['title' => 'Dashboard SKBP']);
     }

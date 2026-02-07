@@ -41,8 +41,11 @@
 
     <!-- SIDEBAR -->
     <aside class="w-64 bg-green-700 text-white flex flex-col">
-        <div class="p-6 text-xl font-bold border-b border-green-600">
-            SKBP Muhammadiyah
+        <div class="p-6 border-b border-green-600 flex items-center gap-3 justify-center">
+            <img src="{{ asset('favicon.png') }}" class="h-10">
+            <span class="text-xl font-bold">
+                SKBP Muhammadiyah
+            </span>
         </div>
 
         <nav class="flex-1 p-4 space-y-2">

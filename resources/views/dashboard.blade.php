@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <h1 class="text-2xl font-bold mb-6">Dashboard Mahasiswa</h1>
 
 {{-- TAHAP 1 --}}
@@ -30,7 +31,7 @@
     </p>
 
     {{-- ================= BUKU ================= --}}
-    @elseif($mahasiswa->jenis === 'buku')
+    @elseif($mahasiswa->jenis === 'Buku')
     <p class="font-semibold mb-2 text-red-700">
         ⚠ Harap melengkapi dokumen dalam waktu 7 hari karena dokumen terhapus otomatis oleh sistem.
     </p>
@@ -81,7 +82,7 @@
     </a>
 
     {{-- ================= ARTIKEL ================= --}}
-    @elseif($mahasiswa->jenis === 'artikel')
+    @elseif($mahasiswa->jenis === 'Artikel')
     <p class="font-semibold mb-2 text-red-700">
         ⚠ Harap melengkapi dokumen dalam waktu 7 hari karena dokumen terhapus otomatis oleh sistem.
     </p>

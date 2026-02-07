@@ -8,65 +8,95 @@
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 </head>
 
-<body class="min-h-screen flex items-center justify-center bg-white">
+<body
+    class="min-h-screen flex items-center justify-center bg-cover bg-center"
+    style="background-image: url('{{ asset('bg.png') }}')">
 
-    <div class="w-full max-w-md border-2 border-green-500 rounded-3xl p-10">
+    <!-- overlay gelap -->
+    <div class="absolute inset-0 bg-black/50"></div>
 
-        <form method="POST" action="/login" class="space-y-6">
+    <!-- CARD LOGIN -->
+    <div class="relative w-full max-w-md bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-10">
+
+        <!-- LOGO -->
+        <div class="text-center mb-5 mt-5">
+            <img src="{{ asset('favicon.png') }}" class="mx-auto h-14 mb-2">
+            <h1 class="text-green-600 font-bold text-xl">SKBP Perpustakaan UMPR</h1>
+            <p class="text-sm text-gray-600 mt-2">
+                Website Pembuatan<br>
+                <span class="font-semibold">SKBP (Surat Keterangan Bebas Pustaka)</span> Universitas Muhammadiyah Palangka Raya
+            </p>
+        </div>
+
+        <!-- INFO -->
+        <!-- <div class="text-sm text-red-500 text-center mb-5">
+            Lupa password?<br>
+            Silahkan hubungi <span class="italic">Operator Program Studi</span>
+            untuk bantuan reset password.
+        </div> -->
+
+        <form method="POST" action="/login" class="space-y-5">
             @csrf
 
-            <input type="text" name="nim" id="nim"
+            <!-- NIM -->
+            <input
+                type="text"
+                name="nim"
+                id="nim"
                 placeholder="NIM XX.XX.XXXX"
                 maxlength="26"
-                class="w-full px-5 py-3 text-center border-2 border-green-500 rounded-xl
-    focus:outline-none focus:ring-2 focus:ring-green-400"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-400 focus:outline-none text-center"
                 required>
 
-            {{-- CAPTCHA --}}
-            <div class="flex items-center gap-3 mt-4">
-                <!-- Input captcha -->
+            <!-- CAPTCHA -->
+            <div class="flex items-center gap-3">
                 <input
                     type="text"
                     name="captcha"
-                    placeholder="Ketik kode di gambar"
-                    class="flex-1 px-4 py-2 border-2 border-green-500 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-green-400"
+                    placeholder="Kode captcha"
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-center focus:ring-2 focus:ring-green-400 focus:outline-none"
                     required>
 
-                <!-- Gambar captcha -->
                 <img
                     src="/captcha"
                     id="captchaImg"
-                    class="h-11 w-20 border-2 border-green-500 rounded-lg"
+                    class="h-11 w-24 border rounded-lg bg-white"
                     alt="Captcha">
 
-
-                <!-- Tombol refresh -->
                 <button
                     type="button"
                     onclick="document.getElementById('captchaImg').src='/captcha?'+Math.random()"
-                    class="text-green-600 text-2xl font-bold"
+                    class="text-green-600 text-xl font-bold"
                     title="Refresh CAPTCHA">
                     ↻
                 </button>
-
             </div>
 
-
-            <button type="submit"
-                class="w-full bg-green-500 text-white font-semibold py-3 rounded-lg hover:bg-green-600 transition">
-                Masuk
+            <!-- BUTTON -->
+            <button
+                type="submit"
+                class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg transition">
+                Login
             </button>
 
         </form>
 
+        <!-- ERROR -->
         @if(session('error'))
-        <p class="mt-6 text-center text-red-500 font-semibold">
+        <p class="mt-5 text-center text-red-600 font-semibold">
             {{ session('error') }}
         </p>
         @endif
 
+        <!-- FOOTER -->
+        <div class="text-center text-xs text-gray-600 mt-6">
+            Universitas Muhammadiah Palangka Raya<br>
+            2025
+        </div>
+
     </div>
 
+    <!-- FORMAT NIM -->
     <script>
         const nimInput = document.getElementById('nim');
         nimInput.addEventListener('input', function() {

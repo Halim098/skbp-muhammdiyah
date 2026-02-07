@@ -92,7 +92,12 @@ class AdminDokumenController extends Controller
                     isset($request->keterangan[$id]) &&
                     trim($request->keterangan[$id]) !== ''
                 ) {
-                    $update['keterangan'] = $request->keterangan[$id];
+                    if ($status === 'diterima') {
+                        // jika diterima, keterangan dihapus
+                        $update['keterangan'] = '-';
+                    } else {
+                        $update['keterangan'] = trim($request->keterangan[$id]);
+                    }
                 }
 
                 DB::table('dokumen')
@@ -146,9 +151,9 @@ class AdminDokumenController extends Controller
             ->where('nim', $nim)
             ->value('jenis');
 
-        if ($jenis_karya === 'artikel') {
+        if ($jenis_karya === 'Artikel') {
             $wajib = $wajibartikel;
-        } elseif ($jenis_karya === 'buku') {
+        } elseif ($jenis_karya === 'Buku') {
             $wajib = $wajibbuku;
         } else {
             $wajib = $wajibskripsi;

@@ -5,6 +5,10 @@
 
 @php
 $mhs = session('mahasiswa');
+
+function fieldValue($val) {
+return ($val && $val !== '-') ? $val : '';
+}
 @endphp
 
 @if(session('success'))
@@ -25,32 +29,35 @@ $mhs = session('mahasiswa');
             <p>NIM :</p>
             <input type="text" name="nim" readonly
                 value="{{ $mhs->nim }}"
-                class="w-full px-4 py-3 border rounded bg-gray-100">
+                class="w-full px-4 py-3 border rounded bg-gray-100"
+                required>
 
             <p>Nama :</p>
             <input type="text" name="nama"
-                placeholder="{{ $mhs->nama }}"
-                class="w-full px-4 py-3 border rounded">
+                value="{{ fieldValue($mhs->nama) }}"
+                class="w-full px-4 py-3 border rounded"
+                required>
+
 
             <p>Fakultas :</p>
-            <select name="fakultas"
+            <select name="fakultas" required
                 class="w-full px-4 py-3 border rounded select-search">
                 <option value="">-- Pilih Fakultas --</option>
                 @foreach($fakultas as $f)
                 <option value="{{ $f->nama }}"
-                    {{ ($mhs->fakultas ?? '') == $f->nama ? 'selected' : '' }}>
+                    {{ strtolower($mhs->fakultas ?? '') == strtolower($f->nama) ? 'selected' : '' }}>
                     {{ $f->nama }}
                 </option>
                 @endforeach
             </select>
 
             <p>Prodi :</p>
-            <select name="jurusan"
+            <select name="jurusan" required
                 class="w-full px-4 py-3 border rounded select-search">
                 <option value="">-- Pilih Prodi --</option>
                 @foreach($prodi as $p)
                 <option value="{{ $p->nama }}"
-                    {{ ($mhs->jurusan ?? '') == $p->nama ? 'selected' : '' }}>
+                    {{ strtolower($mhs->jurusan ?? '') == strtolower($p->nama) ? 'selected' : '' }}>
                     {{ $p->nama }}
                 </option>
                 @endforeach
@@ -58,8 +65,10 @@ $mhs = session('mahasiswa');
 
             <p>Alamat :</p>
             <input type="text" name="alamat"
-                placeholder="{{ $mhs->alamat ?? 'Alamat' }}"
-                class="w-full px-4 py-3 border rounded">
+                value="{{ fieldValue($mhs->alamat) }}"
+                class="w-full px-4 py-3 border rounded"
+                required>
+
 
         </div>
 
@@ -67,21 +76,25 @@ $mhs = session('mahasiswa');
         <div class="space-y-4">
             <p>Tempat, Tanggal Lahir :</p>
             <input type="text" name="tempat_tanggal_lahir"
-                placeholder="{{ $mhs->tempat_tanggal_lahir ?? 'Tempat, Tanggal Lahir' }}"
-                class="w-full px-4 py-3 border rounded">
+                value="{{ fieldValue($mhs->tempat_tanggal_lahir) }}"
+                class="w-full px-4 py-3 border rounded"
+                required>
 
             <p>No HP :</p>
             <input type="text" name="no_hp"
-                placeholder="{{ $mhs->no_hp ?? 'No HP' }}"
-                class="w-full px-4 py-3 border rounded">
+                value="{{ fieldValue($mhs->no_hp) }}"
+                class="w-full px-4 py-3 border rounded"
+                required>
 
             <p>Email :</p>
             <input type="email" name="email"
-                placeholder="{{ $mhs->email ?? 'Email' }}"
-                class="w-full px-4 py-3 border rounded">
+                value="{{ fieldValue($mhs->email) }}"
+                class="w-full px-4 py-3 border rounded"
+                required>
+
 
             <p>Agama :</p>
-            <select name="agama"
+            <select name="agama" required
                 class="w-full px-4 py-3 border rounded">
                 <option value="" disabled selected>Agama</option>
                 <option {{ ($mhs->agama ?? '') == 'Islam' ? 'selected' : '' }}>Islam</option>
@@ -92,21 +105,24 @@ $mhs = session('mahasiswa');
             </select>
 
             <p>Jenis Karya :</p>
-            <select name="jenis"
+            <select name="jenis" required
                 class="w-full px-4 py-3 border rounded">
                 <option value="" disabled selected>Jenis Karya</option>
-                <option value="skripsi" {{ ($mhs->jenis ?? '') == 'skripsi' ? 'selected' : '' }}>Skripsi</option>
-                <option value="KTI" {{ ($mhs->jenis ?? '') == 'KTI' ? 'selected' : '' }}>KTI</option>
-                <option value="tesis" {{ ($mhs->jenis ?? '') == 'tesis' ? 'selected' : '' }}>Tesis</option>
-                <option value="artikel" {{ ($mhs->jenis ?? '') == 'artikel' ? 'selected' : '' }}>Artikel</option>
-                <option value="buku" {{ ($mhs->jenis ?? '') == 'buku' ? 'selected' : '' }}>Buku</option>
+                <option value="Skripsi" {{ strtolower($mhs->jenis ?? '') == 'skripsi' ? 'selected' : '' }}>Skripsi</option>
+                <option value="KTI" {{ strtolower($mhs->jenis ?? '') == 'kti' ? 'selected' : '' }}>KTI</option>
+                <option value="Tesis" {{ strtolower($mhs->jenis ?? '') == 'tesis' ? 'selected' : '' }}>Tesis</option>
+                <option value="Artikel" {{ strtolower($mhs->jenis ?? '') == 'artikel' ? 'selected' : '' }}>Artikel</option>
+                <option value="Buku" {{ strtolower($mhs->jenis ?? '') == 'buku' ? 'selected' : '' }}>Buku</option>
             </select>
         </div>
     </div>
+
     <p class="mt-3 mb-2">Judul Karya Ilmiah :</p>
     <input type="text" name="judul_karya"
-        placeholder="{{ $mhs->judul_karya ?? 'Judul Karya' }}"
-        class="w-full px-4 py-3 border rounded">
+        value="{{ fieldValue($mhs->judul_karya) }}"
+        class="w-full px-4 py-3 border rounded"
+        required>
+
 
     <!-- BUTTON -->
     <div class="mt-8 text-center">
